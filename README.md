@@ -23,8 +23,8 @@ Gitea dashboard will running in docker swarm server.
 ## Instalation & Configuration Steps
 #### 1. Deploy Gitea in swarm devops central 
 
-```
 - Using docker context to deploy from local-remote, then deploy using stack deployment.
+
 ```
 docker stack deploy -c gitea.yml gitea
 ```
