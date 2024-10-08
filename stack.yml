@@ -1,0 +1,48 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16.1-alpine
+    deploy:
+      replicas: 1
+    ports:
+      - "54322:5432"
+    networks:
+      - public
+    environment:
+      POSTGRES_DB: db_gitea
+      POSTGRES_USER: user_gitea
+      POSTGRES_PASSWORD: password_gitea
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  gitea:
+    image: gitea/gitea:1.22.0
+    deploy:
+      replicas: 1
+    ports:
+      - "7500:3000"
+      - "222:22"
+    networks:
+      - public
+    environment:
+      USER_UID: 1000
+      USER_GID: 1000
+      GITEA__database__DB_TYPE: postgres
+      GITEA__database__HOST: postgres:5432
+      GITEA__database__NAME: db_gitea
+      GITEA__database__USER: user_gitea
+      GITEA__database__PASSWD: password_gitea
+    volumes:
+      - gitea_data:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+
+networks:
+  public:
+    external: true
+
+
+volumes:
+  gitea_data:
+  postgres_data:
